@@ -135,10 +135,11 @@ gltfLoader.load('/models/tent4side.glb', (gltf)=>{
 
 for (let i = 0 ; i < colors.length; i++){
     textureLoader.load(colors[i].url, (texture)=>{
+        texture.generateMipmaps = true
         texture.colorSpace = THREE.SRGBColorSpace;
         texture.wrapS = THREE.RepeatWrapping;
         texture.wrapT = THREE.RepeatWrapping;
-        texture.repeat.set(20, 20);
+        texture.repeat.set(25, 25);
         colors[i].texture = texture;
     })
 }
@@ -181,10 +182,7 @@ renderer.setClearColor(new THREE.Color('white'))
 //--------------------------------------- Lil gui
 const gui = new GUI();
 
-const options = {
-    selectedOption: 'Silver', // Opción inicial seleccionada
-};
-
+const options = {};
 let optionColorList = [];
 for (const color of colors){
     optionColorList.push(color.name)
@@ -246,7 +244,7 @@ const updateMaterials = (map = null)=>{
             child.material = new THREE.MeshBasicMaterial({
                 map: map,
                 side: THREE.DoubleSide,
-                color: 'gray',
+                color: map ? 'white' : 'lightgray',
             });
         }
     }
