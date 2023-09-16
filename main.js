@@ -26,7 +26,7 @@ const models = [
     },
 ]
 
-const fabric = [
+const fabrics = [
     {
         name: '1',
     },
@@ -135,6 +135,10 @@ gltfLoader.load('/models/tent4side.glb', (gltf)=>{
 
 for (let i = 0 ; i < colors.length; i++){
     textureLoader.load(colors[i].url, (texture)=>{
+        texture.colorSpace = THREE.SRGBColorSpace;
+        texture.wrapS = THREE.RepeatWrapping;
+        texture.wrapT = THREE.RepeatWrapping;
+        texture.repeat.set(20, 20);
         colors[i].texture = texture;
     })
 }
@@ -152,7 +156,7 @@ const cameraGroup = new THREE.Group()
 scene.add(cameraGroup)
 
 const camera = new THREE.PerspectiveCamera(50, sizes.width/sizes.height, 0.01, 100);
-camera.position.set(20, 15, 50);
+camera.position.set(20, 30, 30);
 
 //Renderer
 const canvas = document.querySelector('.experience')
@@ -178,7 +182,7 @@ renderer.setClearColor(new THREE.Color('white'))
 const gui = new GUI();
 
 const options = {
-    selectedOption: 'Option 1', // Opción inicial seleccionada
+    selectedOption: 'Silver', // Opción inicial seleccionada
 };
 
 let optionColorList = [];
@@ -186,15 +190,23 @@ for (const color of colors){
     optionColorList.push(color.name)
 }
 
-const optionController = gui.add(options, 'Color', optionColorList);
+const colorsController = gui.add(options, 'Color', optionColorList);
 
-optionController.onChange((selectedOption) => {
+colorsController.onChange((selectedOption) => {
     for (const color of colors){
         if(color.name === selectedOption){
             updateMaterials(color.texture);
         }
     }
 });
+
+let optionFabricList = [];
+for (const fabric of fabrics){
+    optionFabricList.push(fabric.name);
+}
+
+const fabricController = gui.add(options, 'Fabric', optionFabricList);
+
 
 //-------------------------------------------- Animation ----------------------------------
 
